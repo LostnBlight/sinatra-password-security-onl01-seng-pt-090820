@@ -17,42 +17,63 @@ class ApplicationController < Sinatra::Base
 	end
 
 	post "/signup" do
-		#your code here!
-	end
+		#your code here!	    user = User.new(username: params[:username], password: params[:password])
+	end	    if user.save
 
-	get "/login" do
-		erb :login
-	end
+      redirect '/login'
 
-	post "/login" do
-		#your code here!
-	end
+    else
+	get "/login" do	      redirect '/failure'
+		erb :login	    end
+	end	  end
 
-	get "/success" do
-		if logged_in?
-			erb :success
-		else
-			redirect "/login"
-		end
-	end
 
-	get "/failure" do
-		erb :failure
-	end
+	post "/login" do	
+		#your code here!	  get "/login" do
+	end	    erb :login
 
-	get "/logout" do
-		session.clear
-		redirect "/"
-	end
+  end
+	get "/success" do	
+		if logged_in?	  post "/login" do
+			erb :success	    user = User.find_by(username: params[:username])
+		else	    if user && user.authenticate(params[:password])
+			redirect "/login"	      session[:user_id] = user.id
+		end	      redirect '/success'
+	end	    else
 
-	helpers do
-		def logged_in?
-			!!session[:user_id]
-		end
+      redirect '/failure'
+	get "/failure" do	    end
+		erb :failure	  end
+	end	
 
-		def current_user
-			User.find(session[:user_id])
-		end
-	end
+  get "/success" do
+	get "/logout" do	    if logged_in?
+		session.clear	      erb :success
+		redirect "/"	    else
+	end	      redirect "/login"
+
+    end
+	helpers do	  end
+		def logged_in?	
+			!!session[:user_id]	  get "/failure" do
+		end	    erb :failure
+
+  end
+		def current_user	
+			User.find(session[:user_id])	  get "/logout" do
+		end	    session.clear
+	end	    redirect "/"
+
+  end
+end 	
+  helpers do
+    def logged_in?
+      !!session[:user_id]
+    end
+
+    def current_user
+      User.find(session[:user_id])
+    end
+  end
 
 end

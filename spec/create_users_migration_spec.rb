@@ -8,6 +8,7 @@ describe 'user' do
     ActiveRecord::Base.connection.execute(sql)
     CreateUsers.new.up
   end
+end
 
   it 'has a name' do
     user = User.new
@@ -17,4 +18,6 @@ describe 'user' do
     expect(User.where(username: "Steven").first).to eq(user)
   end
 end
+
+
 
